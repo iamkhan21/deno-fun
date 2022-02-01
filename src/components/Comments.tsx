@@ -1,3 +1,4 @@
+/** @jsx h */
 import { Component, h } from '../nano.ts';
 
 export class Comments extends Component {

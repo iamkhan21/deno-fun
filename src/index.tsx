@@ -1,7 +1,9 @@
+/** @jsx h */
 import { h, Helmet, renderSSR } from './nano.ts';
-import { serve } from 'https://deno.land/std@0.116.0/http/server.ts';
 import { Comments } from './components/Comments.tsx';
 import { Hello } from './components/Hello.tsx';
+import { serve } from 'https://deno.land/std@0.116.0/http/server.ts';
+import { config } from 'https://deno.land/x/dotenv/mod.ts';
 
 const comments = [
 	'Hey! This is the first comment.',
@@ -48,9 +50,10 @@ const html = `
 </html>`;
 
 const addr = ':8080';
+const { HOST_URL } = config();
 
 const handler = (request: Request): Response => {
-	if (request.url === 'http://localhost:8080/') {
+	if (request.url === HOST_URL) {
 		return new Response(html, { headers: { 'Content-Type': 'text/html' } });
 	}
 

@@ -1,3 +1,4 @@
+/** @jsx h */
 import { h } from '../nano.ts';
 
 export const Hello = () => {

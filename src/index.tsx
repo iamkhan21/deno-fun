@@ -3,7 +3,6 @@ import { h, Helmet, renderSSR } from './nano.ts';
 import { Comments } from './components/Comments.tsx';
 import { Hello } from './components/Hello.tsx';
 import { serve } from 'https://deno.land/std@0.116.0/http/server.ts';
-import { config } from 'https://deno.land/x/dotenv/mod.ts';
 
 const comments = [
 	'Hey! This is the first comment.',
@@ -21,11 +20,8 @@ const App = () => (
 				content='Server Side Rendered Nano JSX Application'
 			/>
 		</Helmet>
-
 		<Hello />
-
 		<h2>Comments</h2>
-
 		<div id='comments'>
 			<Comments comments={comments} />
 		</div>
@@ -41,6 +37,7 @@ const html = `
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deno Fun</title>
     ${head.join('\n')}
   </head>
   <body>
@@ -49,16 +46,20 @@ const html = `
   </body>
 </html>`;
 
-const addr = ':8080';
-const { HOST_URL } = config();
-
 const handler = (request: Request): Response => {
-	if (request.url === HOST_URL) {
-		return new Response(html, { headers: { 'Content-Type': 'text/html' } });
-	}
+	const url: URL = new URL(request.url);
 
-	return new Response('404', { status: 404 });
+	switch (url.pathname) {
+		case '/':
+			return new Response(html, {
+				headers: { 'Content-Type': 'text/html' },
+			});
+
+		default:
+			return new Response('404', { status: 404 });
+	}
 };
 
-console.log(`HTTP webserver running. Access it at: http://localhost:8080/`);
-await serve(handler, { addr });
+console.log(`HTTP webserver running. Access it at: http://localhost:8000/`);
+
+await serve(handler);

@@ -1,32 +1,7 @@
 /** @jsx h */
-import { h, Helmet, renderSSR } from './nano.ts';
-import { Comments } from './components/Comments.tsx';
-import { Hello } from './components/Hello.tsx';
 import { serve } from 'https://deno.land/std@0.116.0/http/server.ts';
-
-const comments = [
-	'Hey! This is the first comment.',
-	'Hi, from another comment!',
-];
-
-const App = () => (
-	<div>
-		<Helmet>
-			<title>
-				Nano JSX SSR
-			</title>
-			<meta
-				name='description'
-				content='Server Side Rendered Nano JSX Application'
-			/>
-		</Helmet>
-		<Hello />
-		<h2>Comments</h2>
-		<div id='comments'>
-			<Comments comments={comments} />
-		</div>
-	</div>
-);
+import { h, Helmet, renderSSR } from './deps.ts';
+import App from './shell/App.tsx';
 
 const ssr = renderSSR(<App />);
 const { body, head, footer } = Helmet.SSR(ssr);
@@ -37,7 +12,17 @@ const html = `
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deno Fun</title>
+    <link rel="stylesheet" href="https://unpkg.com//open-props@1.3.1/open-props.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/open-props@1.3.1/normalize.min.css"/>
+    <style>
+      body {
+        padding: 10px 25px;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+        gap: 20px;
+      }
+    </style>
     ${head.join('\n')}
   </head>
   <body>
